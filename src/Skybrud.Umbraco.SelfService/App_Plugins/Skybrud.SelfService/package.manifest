@@ -1,0 +1,51 @@
+﻿{
+	propertyEditors: [
+		{
+			alias: "Skybrud.SelfService.Categories",
+			name: "Skybrud Selvbetjening - Kategorivælger",
+			editor: {
+				view: "~/App_Plugins/Skybrud.SelfService/Views/CategoriesEditor.html"
+			}
+		},
+		{
+			alias: "Skybrud.SelfService.List",
+			name: "Skybrud Selvbetjening - Punktopstilling",
+			editor: {
+				view: "~/App_Plugins/Skybrud.SelfService/Views/ListEditor.html",
+				valueType: "JSON"
+			},
+			prevalues: {
+				fields: [
+					{
+						label: "Show ordered list?",
+						key: "orderedList",
+						view: "boolean"
+					},
+					{
+						label: "Maximum items",
+						key: "maxItems",
+						view: "number"
+					}
+				]
+			}
+		},
+		{
+			alias: "Skybrud.SelfService.ActionPagesList",
+			name: "Skybrud Selvbetjening - Handlingssider",
+			editor: {
+				view: "~/App_Plugins/Skybrud.SelfService/Views/ActionPagesList.html"
+			}
+		}
+	],
+	javascript: [
+		"~/App_Plugins/Skybrud.SelfService/Directives/Loader.js",
+		"~/App_Plugins/Skybrud.SelfService/Directives/skybrudEnter.js",
+		"~/App_Plugins/Skybrud.SelfService/Controllers/CategoriesEditor.js",
+		"~/App_Plugins/Skybrud.SelfService/Controllers/CategoriesDialog.js",
+		"~/App_Plugins/Skybrud.SelfService/Controllers/ListEditor.js",
+		"~/App_Plugins/Skybrud.SelfService/Controllers/ActionPagesList.js"
+	],
+	css: [
+		"~/App_Plugins/Skybrud.SelfService/Styles/Default.css"
+	]
+}

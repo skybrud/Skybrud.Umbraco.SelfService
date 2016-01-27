@@ -1,0 +1,23 @@
+﻿<div class="SelfServiceSteps" ng-controller="SelfServiceListController">
+    <div>
+        <table>
+            <tr ng-repeat="item in model.value.items">
+                <th>
+
+                    <span ng-show="!orderedList">&bull;</span>
+                    <span ng-show="orderedList">{{$index + 1}}.</span>
+                </th>
+                <td><input type="text" ng-model="item.value" skybrud-enter="enter($event)" /></td>
+            </tr>
+            <tr ng-show="model.value.items.length < maxItems">
+                <td></td>
+                <td>
+                    <i class="icon icon-add blue"></i>
+                    <a href="#" ng-click="add()" prevent-default="">
+                        <localize key="general_add" class="ng-isolate-scope ng-scope">Add</localize>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

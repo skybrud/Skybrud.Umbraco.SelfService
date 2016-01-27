@@ -1,0 +1,13 @@
+﻿<li>
+    <div ng-class="{checked: category.checked, checked2: category.checked2, children: category.children.length > 0}">
+        <div style="margin-left: {{((category.level - 1) * 20) + 5}}px;">
+            <ins ng-class="{'icon-navigation-right': !category.expanded, 'icon-navigation-down': category.expanded}" ng-click="category.expanded = !category.expanded" class="icon-navigation-down">&nbsp;</ins>
+            <i class="icon icon-tag" ng-click="toggle(category, $event)"></i>
+            <i class="icon icon-small"></i>
+            <a href="#" ng-click="toggle(category, $event)" prevent-default="">{{category.name}}</a>
+        </div>
+    </div>
+    <ul ng-show="category.expanded">
+        <li ng-repeat="category in category.children" ng-include="'/App_Plugins/Skybrud.SelfService/Views/Partials/Category.html'"></li>
+    </ul>
+</li>

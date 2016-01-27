@@ -1,0 +1,19 @@
+﻿<div class="SelfServiceCategories" ng-controller="SelfServiceCategoriesController">
+    <div>
+        <ul>
+            <li ng-repeat="category in categories" title="ID: {{category.id}}">
+                <i class="{{category.icon}}"></i>
+                {{category.name}}
+                <span>(<a href="#" ng-click="removeCategory($index)" prevent-default=""><localize key="general_delete" class="ng-isolate-scope ng-scope">Delete</localize></a>)</span>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <i class="icon icon-add blue"></i>
+                <a href="#" ng-click="addCategories()" prevent-default="">
+                    <localize key="general_add" class="ng-isolate-scope ng-scope">Add</localize>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+﻿<div class="SelfServiceActionPagesList" ng-controller="SelfServiceActionPagesListController">
+    
+    <table class="filters">
+        <tr>
+            <td>
+                <a class="btn" href="/umbraco/#/content/content/edit/1071?doctype=SkySelfServiceActionPage&create=true">Opret ny handlingsside</a>
+            </td>
+            <td></td>
+            <td>
+                <strong>Filtrering:</strong>
+            </td>
+            <td>
+                <input type="text" ng-model="text" placeholder="Søg..." style="width: 350px;" />
+            </td>
+            <td>
+                <a class="btn" href="#" ng-click="selectCategories()" prevent-default="">Vælg kategorier ({{categories.length}})</a>
+            </td>
+        </tr>
+    </table>
+
+    <div class="table" ng-class="{loading: loading}" style="position: relative;">
+        <skybrud-loader></skybrud-loader>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <a href="#" prevent-default="" ng-click="sort('name', 'asc');"><localize key="general_name">Name</localize></a>
+                        <i class="icon" ng-class="{'icon-navigation-down': isSortDirection('name', 'asc'), 'icon-navigation-up': isSortDirection('name', 'desc')}"></i>
+                    </th>
+                    <th>
+                        <a href="#" prevent-default="" ng-click="sort('updated', 'asc');"><localize key="content_updateDate">Last edited</localize></a>
+                        <i class="icon" ng-class="{'icon-navigation-down': isSortDirection('updated', 'asc'), 'icon-navigation-up': isSortDirection('updated', 'desc')}"></i>
+                    </th>
+                    <th>
+                        <a href="#" prevent-default="" ng-click="sort('writer', 'asc');"><localize key="content_updatedBy">Updated by</localize></a>
+                        <i class="icon" ng-class="{'icon-navigation-down': isSortDirection('writer', 'asc'), 'icon-navigation-up': isSortDirection('writer', 'desc')}"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-show="loading && results.length == 0">
+                <tr>
+                    <td colspan="5" style="padding: 50px; font-size: 18px;">Indlæser handlingssider.</td>
+                </tr>
+            </tbody>
+            <tbody ng-show="!loading && results.length == 0">
+                <tr>
+                    <td colspan="5" style="padding: 50px; font-size: 18px;">Din søgning matcher ingen handlingssider.</td>
+                </tr>
+            </tbody>
+            <tbody class="items" ng-show="results.length > 0">
+                <tr ng-repeat="result in results">
+                    <td class="fw">
+                        <a href="/umbraco/#/content/content/edit/{{result.id}}?page=1">{{result.name}}</a>
+                    </td>
+                    <td class="nw">{{result.updated}}</td>
+                    <td class="nw">{{result.updatedBy.name}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="7">
+                        <div ng-show="!loading && pagination.total > 0" class="pull-left" style="padding: 8px 4px 2px 4px; font-size: 11px;">
+                            Viser {{pagination.from}}-{{pagination.to}} af {{pagination.total}} &bull; Side {{pagination.page}} af {{pagination.pages}}
+                        </div>
+                        <div class="pagination pagination-right" style="margin: 0;">
+                            <ul>
+                                <li ng-class="{disabled:pagination.page <= 1}">
+                                    <a href="#" ng-click="prev()" prevent-default="">
+                                        <localize key="general_previous" class="ng-isolate-scope ng-scope">Previous</localize>
+                                    </a>
+                                </li>
+                                <li ng-repeat="pgn in pagination.pagination" ng-class="{active: pgn.isActive}">
+                                    <a href="#" ng-click="updateList(pgn.val)" prevent-default="">{{pgn.val}}</a>
+                                </li>
+                                <li ng-class="{disabled:pagination.page >= pagination.pages}" class="">
+                                    <a href="#" ng-click="next()" prevent-default="">
+                                        <localize key="general_next" class="ng-isolate-scope ng-scope">Next</localize>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>

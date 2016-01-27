@@ -1,0 +1,21 @@
+﻿<div class="umb-panel SelfServiceCategoriesDialog" ng-controller="SelfServiceCategoriesDialogController">
+    <div class="umb-panel-body no-header with-footer">
+        <ul>
+            <li ng-repeat="category in categoriesTree" ng-include="'/App_Plugins/Skybrud.SelfService/Views/Partials/Category.html'"></li>
+        </ul>
+    </div>
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <a href ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+                <button class="btn btn-primary" ng-click="select()">
+                    <localize key="buttons_select">Select</localize>
+                    ({{bacon.length}})
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

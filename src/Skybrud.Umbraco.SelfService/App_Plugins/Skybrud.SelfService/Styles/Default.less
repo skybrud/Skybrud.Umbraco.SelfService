@@ -1,0 +1,118 @@
+﻿.SelfServiceCategories {
+
+    ul, li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    span, span a {
+        font-size: 11px;
+        color: #333;
+    }
+
+}
+
+.SelfServiceSteps {
+
+    th {
+        width: 21px;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    input[type=text] {
+        margin-bottom: 3px;
+        width: 450px;
+    }
+
+}
+
+.SelfServiceCategoriesDialog {
+
+    ul,li {
+        margin: 0;
+        padding: 0;
+    }
+
+    ul {
+        list-style: none;
+        li > div {
+            > div {
+                position: relative;
+                padding: 5px 0 5px 0;
+                overflow: hidden;
+                vertical-align: middle;
+            }
+
+            ins {
+                visibility: hidden;
+            }
+            &:hover {
+                background: #f8f8f8;
+                
+            }
+            &.children:hover {
+                ins {
+                    visibility: visible;
+                    cursor: pointer;
+                }
+            }
+
+        }
+
+    }
+
+    .icon {
+        margin: 1px 13px 1px 0;
+        font-size: 20px;
+        color: #21201c;
+        vertical-align: middle;
+    }
+
+    .icon.icon-small {
+        position: absolute;
+        left: 0;
+        top: 3px;
+        display: none;
+        &:before {
+            position: absolute;
+            padding-top: 8px;
+            font-family: 'icomoon';
+            font-size: 8px;
+            color: red;
+            content: "\e165" !important;
+            left: 40px;
+        }
+    }
+
+    ul li > div.checked2 {
+        .icon.icon-small {
+            display: initial;
+        }
+    }
+
+    .checked i {
+        color: #2e8aea !important;
+        &:before {
+            content: "\e165" !important;
+        }
+    }
+
+}
+
+.SelfServiceActionPagesList {
+
+    @baseColor: #8d7758;
+
+    .filters td {
+        padding: 0 10px 10px 0;
+    }
+    
+    td.fw { width: 100%; }
+    td.nw { white-space: nowrap; }
+
+    @import "Table";
+    @import "_loader";
+
+}
