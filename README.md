@@ -51,6 +51,46 @@ namespace solution.Routing {
 
 
 5. Create a ContentFinder to handle the urls
+```C#
+namespace solution.Routing {
+  public class ContentFinder : IContentFinder {
+    public bool TryFindContent(PublishedContentRequest request) {
+      // Get the URL, skip the query string and trim any trailing slashes (so we can assume that they're not there)
+      string url = Request.RawUrl.Split('?')[0].TrimEnd('/');
+
+      Match match = RegEx.Match(url, "^/selvbetjening/(.+?)$");
+      
+      if(!match.Success) continue;
+      
+      IPublishedContent content = GetSingleContentFromExamine(request.Uri.AbsolutePath.Split('/').Last().TrimEnd(), "SkySelfServiceActionPage");
+      
+      if (!request.HasTemplate) {
+        request.TrySetTemplate("templateAlias");
+      }
+
+      request.PublishedContent = content;
+    }
+    
+    
+    private IPublishedContent GetSingleContentFromExamine(string nodename, string documentTypeAlias) {
+            // Get a reference to the external searcher
+            BaseSearchProvider externalSearcher = ExamineManager.Instance.SearchProviderCollection["ExternalSearcher"];
+
+            // Create a new search criteria and set our query
+            ISearchCriteria criteria = externalSearcher.CreateSearchCriteria();
+            criteria = criteria.RawQuery(string.Format("nodeTypeAlias_lci:{0}  +urlName_lci:{1}", documentTypeAlias.ToLower(),
+                    nodename.ToLower()));
+
+            // Get the first search result (since there really shouldn't be more with the same GUID)
+            SearchResult first = externalSearcher.Search(criteria).FirstOrDefault();
+
+            // Get the content node based on the Umbraco content id
+            return first == null ? null : UmbracoContext.Current.ContentCache.GetById(first.Id);
+        }
+  }
+}
+``` 
+
 
 6. Create a picker of your choice (NuPicker, MNTP, etc)
 
