@@ -27,6 +27,29 @@ else just run /umbraco/api/selfservice/install/ in your favorite browser.
 
 4. Create a Url-Provider to handle your virtual urls
 
+```C#
+namespace solution.Routing {
+  public class UrlProvider : IUrlProvider {
+    public string GetUrl(UmbracoContext umbracoContext, int id, Uri current, UrlProviderMode mode) {
+      try {
+        IPublishedContent content = umbracoContext.ContentCache.GetById(id);
+        
+        if (content == null) return null;
+        
+        if(content.DocumentTypeAlias == "SkySelfServiceActionPage") {
+          return string.Format("/selvbetjening/{0}/", content.UrlName);
+        }
+      } catch(Exception ex) {
+        LogHelper.Error<UrlProvider>("Problem in Custom UrlProvider: ", ex);
+      }
+      
+      return null;
+    }
+  }
+}
+```
+
+
 5. Create a ContentFinder to handle the urls
 
 6. Create a picker of your choice (NuPicker, MNTP, etc)
