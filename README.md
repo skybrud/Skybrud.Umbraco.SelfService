@@ -19,11 +19,11 @@ If you have an existing container for your modules, please add the nodeId from t
 else just run /umbraco/api/selfservice/install/ in your favorite browser.
 
 3. Change your default View for the "Handlingsside visning" doctype
-  1 Edit "Selvbetjening - Handlingssider"
-  2 Tab: Structure
-  3 "Opret brugerdefineret liste" + Save
-  4 Choose "Edit/Rediger"
-  5 PropertyEditor: Skybrud Selvbetjening - Handlingssider
+  1. Edit "Selvbetjening - Handlingssider"
+  2. Tab: Structure
+  3. "Opret brugerdefineret liste" + Save
+  4. Choose "Edit/Rediger"
+  5. PropertyEditor: Skybrud Selvbetjening - Handlingssider
 
 4. Create a Url-Provider to handle your virtual urls
 
