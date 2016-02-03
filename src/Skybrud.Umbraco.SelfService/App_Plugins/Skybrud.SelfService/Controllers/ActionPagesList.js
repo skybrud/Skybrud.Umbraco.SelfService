@@ -1,10 +1,13 @@
-﻿angular.module("umbraco").controller("SelfServiceActionPagesListController", function ($scope, $http, $timeout, dialogService) {
+﻿angular.module("umbraco").controller("SelfServiceActionPagesListController", function ($scope, $http, $timeout, $routeParams, dialogService) {
 
     // Initial model
     $scope.results = [];
     $scope.categories = [];
     $scope.loading = true;
     $scope.text = '';
+
+    // The ID of the current node
+    $scope.contentId = $routeParams.id;
 
     // Initial sorting options
     var sorting = {
