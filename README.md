@@ -17,22 +17,22 @@ Grab a ZIP file of the latest release; unzip and move the contents to the root d
 You have to run a installation-url (in your browser), for Skybrud.Umbraco.SelfService to be able to create documenttypes, datatypes and structure in your solution. 
 
   1. DocTypes installed
-      1. Selvbetjening - Handlingsside
-      2. Selvbetjening - Handlingssider
-      3. Selvbetjening - Kategori
-      4. Selvbetjening - Kategorier
-      5. Selvbetjeningsmodul
+      - Selvbetjening - Handlingsside
+      - Selvbetjening - Handlingssider
+      - Selvbetjening - Kategori
+      - Selvbetjening - Kategorier
+      - Selvbetjeningsmodul
       
   2. Datatypes installed
-      1. # Selvbetjening - Punktopstilling
-      2. # Selvbetjening - Kategorivælger
-      3. # Selvbetjening - Handlingssider
+      - # Selvbetjening - Punktopstilling
+      - # Selvbetjening - Kategorivælger
+      - # Selvbetjening - Handlingssider
       
   3. Structure installed (Content)
-      1. Moduler
-        1. Selvbetjening
-          1. Kategorier
-          2. Handlingssider
+      - Moduler
+        - Selvbetjening
+          - Kategorier
+          - Handlingssider
           
 
 If you have an existing container for your modules, please add the nodeId from this container to your installation-url. Eg.: */umbraco/api/selfservice/install/?parentId=1090*
