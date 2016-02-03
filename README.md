@@ -1,126 +1,229 @@
 Skybrud.Umbraco.SelfService
 ========================
 
-**Skybrud.Umbraco.SelfService** is a modulebased plugin for handling SelfService-pages in a municipality.
+**Skybrud.Umbraco.SelfService** is a module based plugin for handling self service pages for a municipality or similar.
 
-The package can handle categories and pages, so you only have one place to administer your Actionpages (handlingssider).
+In it's current state, the package will add logic for categories and action pages (handlingssider in Danish) that editors can manage via the Umbraco backoffice.
+
+## List of contents
+
+* [Installation](#installation)
+* [Setup](#setup)
+    * [Run the installer](#run-the-installer)
+* [Using the module](#using-the-module)
+    * [URL provider](#url-provider)
+    * [Content finder](#content-finder)
+    * [Startup](#startup)
 
 ## Installation
 
-1. [**NuGet Package**][NuGetPackage]
-Install this NuGet package in your Visual Studio project. If you have both a web and a code project, install in both.
+1. [**NuGet package**][NuGetPackage]  
+Use NuGet to install the package in your Visual Studio project. If you have both a web and a code project, install the package in both projects.
 
 1. [**ZIP file**][GitHubRelease]
-Grab a ZIP file of the latest release; unzip and move the contents to the root directory of your web application.
+Coming soon ;)
 
-2. Run installation url to install data in Umbraco
-You have to run a installation-url (in your browser), for Skybrud.Umbraco.SelfService to be able to create documenttypes, datatypes and structure in your solution. 
+## Setup
 
-  1. DocTypes installed
-      - Selvbetjening - Handlingsside
-      - Selvbetjening - Handlingssider
-      - Selvbetjening - Kategori
-      - Selvbetjening - Kategorier
-      - Selvbetjeningsmodul
-      
-  2. Datatypes installed
-      - # Selvbetjening - Punktopstilling
-      - # Selvbetjening - Kategorivælger
-      - # Selvbetjening - Handlingssider
-      
-  3. Structure installed (Content)
-      - Moduler
-        - Selvbetjening
-          - Kategorier
-          - Handlingssider
-          
+#### Run the installer
+Once you have installed the NuGet package, you will need to run the installer to set up the package. The installer will add a number or content types and data types as well as add a few items in the content section.
 
-If you have an existing container for your modules, please add the nodeId from this container to your installation-url. Eg.: */umbraco/api/selfservice/install/?parentId=1090*
+The installer is currently just a WebApi method that you can call in your browser. When running the installer, it will by default create a new container called `Selvbetjening` (you can just rename this after the install) at the root level. This can be done by calling the following URL in your Umbraco installation:
 
-else just run */umbraco/api/selfservice/install/* in your favorite browser.
+```
+/umbraco/api/selfservice/install/
+```
 
-3. Change your default View for the "Handlingsside visning" doctype
-  1. Edit "Selvbetjening - Handlingssider"
-  2. Tab: Structure
-  3. "Opret brugerdefineret liste" + Save
-  4. Choose "Edit/Rediger"
-  5. PropertyEditor: Skybrud Selvbetjening - Handlingssider
+If you wish the `Selvbetjening` node to be created under a specific node, you can specify the ID of that node as a parameter to the installer like the URL below:
 
-4. Create a Url-Provider to handle your virtual urls
+```
+/umbraco/api/selfservice/install/?parentId=1090
+```
+
+After running the installer, your content section should look something like this:
+
+![image](https://cloud.githubusercontent.com/assets/3634580/12757389/23cf73ba-c9d8-11e5-95fd-7836b3ee98a0.png)
+
+**Set up a list view for action pages (optional)**
+All action pages should be created under the `Handlingssider` node (document type: `Selvbetjening - Handlingssider`). Clicking this node in the content section will display a list of action pages using the default Umbraco list view like shown in the screenshot below:
+
+![image](https://cloud.githubusercontent.com/assets/3634580/12757452/5fe9e6dc-c9d8-11e5-8bfe-7d370e6b643f.png)
+
+If this is fine, you can simply skip this step. Alternatively, you can update the document type to use a custom list view specific to action pages.
+
+To do this, you can go to the Settings section, find the `Selvbetjening - Handlingssider` document type, and select the `Structure` tab. Here you can then click the `Create custom list view`, and then click the `Edit` link just above.
+
+Clicking the `Edit` link will take you to a new data type Umbraco just created for you. Here you can select the `Skybrud Selvbetjening - Handlingssider` property editor rather than Umbraco's default `List view`. This will make the list from before look like the screenshot below (sorry for the Danish):
+
+![image](https://cloud.githubusercontent.com/assets/3634580/12757721/7b6170fa-c9d9-11e5-8c4a-da6f3bb7785a.png)
+
+With the custom list view, you will be able to filter the list by a free text search as well as by one or more of the categories created under the `Kategorier` node.
+
+## Using the module
+
+There are plenty of ways the self service module can be used. At Skybrud.dk, we have a very specific way of using it:
+
+#### URL Provider
+In our setup, the self service nodes lives outside of the normal site tree, so we need to add a URL provider so the editors will see some URLs that actually work.
+
+The code for the URL provider looks something like this:
 
 ```C#
-namespace solution.Routing {
-  public class UrlProvider : IUrlProvider {
-    public string GetUrl(UmbracoContext umbracoContext, int id, Uri current, UrlProviderMode mode) {
-      try {
-        IPublishedContent content = umbracoContext.ContentCache.GetById(id);
+using System;
+using System.Collections.Generic;
+using Umbraco.Core.Logging;
+using Umbraco.Core.Models;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
+
+namespace SelfServiceTest.Routing {
+
+    public class SelfServiceUrlProvider : IUrlProvider {
+
+        public string GetUrl(UmbracoContext umbracoContext, int id, Uri current, UrlProviderMode mode) {
+            
+            try {
+                
+                // Attempt to get the content item from the cache
+                IPublishedContent content = umbracoContext.ContentCache.GetById(id);
+
+                // If the content iten matches our document type, we return our custom URL
+                if (content != null && content.DocumentTypeAlias == "SkySelfServiceActionPage") {
+                    return String.Format("/selvbetjening/{0}/", content.UrlName);
+                }
+            
+            } catch (Exception ex) {
+
+                // Append the exception to the Umbraco log
+                LogHelper.Error<SelfServiceUrlProvider>("Unable to provide URL for action page: " + ex.Message, ex);
+            
+            }
+
+            // NULL means the URL provider didn't provide an URL
+            return null;
         
-        if (content == null) return null;
-        
-        if(content.DocumentTypeAlias == "SkySelfServiceActionPage") {
-          return string.Format("/selvbetjening/{0}/", content.UrlName);
         }
-      } catch(Exception ex) {
-        LogHelper.Error<UrlProvider>("Problem in Custom UrlProvider: ", ex);
-      }
-      
-      return null;
+
+        public IEnumerable<string> GetOtherUrls(UmbracoContext umbracoContext, int id, Uri current) {
+
+            // The self service pages will in our case not have any secondary
+            // URLs, so we just return an empty list at this point
+            return new List<string>();
+
+        }
+
     }
-  }
+
 }
 ```
 
+#### Content Finder
+While the URL provider gives you a way to tell Umbraco the URL of each action page, this is just the visual part. For the actual requests to the action pages to work, we also need a content finder.
 
-5. Create a ContentFinder to handle the urls
 ```C#
-namespace solution.Routing {
-  public class ContentFinder : IContentFinder {
-    public bool TryFindContent(PublishedContentRequest request) {
-      // Get the URL, skip the query string and trim any trailing slashes (so we can assume that they're not there)
-      string url = Request.RawUrl.Split('?')[0].TrimEnd('/');
+using System;
+using System.Text.RegularExpressions;
+using System.Web;
+using Skybrud.Umbraco.SelfService;
+using Umbraco.Core.Models;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
 
-      Match match = RegEx.Match(url, "^/selvbetjening/(.+?)$");
-      
-      if(!match.Success) continue;
-      
-      IPublishedContent content = GetSingleContentFromExamine(request.Uri.AbsolutePath.Split('/').Last().TrimEnd(), "SkySelfServiceActionPage");
-      
-      if (!request.HasTemplate) {
-        request.TrySetTemplate("templateAlias");
-      }
+namespace SelfServiceTest.Routing {
 
-      request.PublishedContent = content;
-    }
-    
-    
-    private IPublishedContent GetSingleContentFromExamine(string nodename, string documentTypeAlias) {
-            // Get a reference to the external searcher
-            BaseSearchProvider externalSearcher = ExamineManager.Instance.SearchProviderCollection["ExternalSearcher"];
+    public class SelfServiceContentFinder : IContentFinder {
 
-            // Create a new search criteria and set our query
-            ISearchCriteria criteria = externalSearcher.CreateSearchCriteria();
-            criteria = criteria.RawQuery(string.Format("nodeTypeAlias_lci:{0}  +urlName_lci:{1}", documentTypeAlias.ToLower(),
-                    nodename.ToLower()));
+        public bool TryFindContent(PublishedContentRequest request) {
+            
+            // Get the URL, skip the query string and trim any trailing slashes (so we can assume that they're not there)
+            string url = HttpContext.Current.Request.RawUrl.Split('?')[0].TrimEnd('/');
 
-            // Get the first search result (since there really shouldn't be more with the same GUID)
-            SearchResult first = externalSearcher.Search(criteria).FirstOrDefault();
+            // Try to match the URL
+            Match match = Regex.Match(url, "^/selvbetjening/(.+?)$");
 
-            // Get the content node based on the Umbraco content id
-            return first == null ? null : UmbracoContext.Current.ContentCache.GetById(first.Id);
+            // If the URL doesn't match, we simply return FALSE (means we haven't found anything)
+            if (!match.Success) return false;
+
+            // Get the parent node of the action pages
+            IPublishedContent parent = SelfServiceHelpers.GetContentFromGuid("942daec4-34cc-4114-9f9e-37c84c6de572");
+
+            // Construct the XPath for finding the action page
+            string xpath = "//SkySelfServiceActionPages[@id=" + parent.Id + "]/SkySelfServiceActionPage[@urlName='" + match.Groups[1].Value + "']";
+
+            // Make the lookup in the content cache
+            IPublishedContent content = UmbracoContext.Current.ContentCache.GetSingleByXPath(xpath);
+
+            // If the action page doesn't already have a template, we specify one explicitly
+            if (!request.HasTemplate) {
+
+                // You should edit this to match your custom template
+                request.TrySetTemplate("ActionPage");
+            
+            }
+
+            // Set the content for the request
+            request.PublishedContent = content;
+
+            // Return whether we found anything
+            return request.PublishedContent != null;
+
         }
-  }
+    
+    }
+
 }
 ``` 
 
+#### Startup
+For both the URL provider and the content finder to work, you need to add them to Umbraco's logic during startup:
 
-6. Create a picker of your choice (NuPicker, MNTP, etc)
+```C#
+using SelfServiceTest.Routing;
+using Umbraco.Core;
+using Umbraco.Web.Routing;
 
-7. Create template for "Selvbetjening - Handlingsside" and add it to the DocType "SkySelfServiceActionPage"
+namespace SelfServiceTest {
+    
+    public class Startup : ApplicationEventHandler {
+        
+        protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext) {
+            
+            // Register our custom content finder
+            ContentFinderResolver.Current.InsertTypeBefore<ContentFinderByNotFoundHandlers, SelfServiceContentFinder>();
 
+            // Register our custom URL provider
+            UrlProviderResolver.Current.InsertTypeBefore<DefaultUrlProvider, SelfServiceUrlProvider>();
+        
+        }
+    
+    }
 
+}
+```
+
+## Installed doctypes, datatypes and content
+
+The following data will be installed in your solution
+
+1. DocTypes installed
+    - Selvbetjening - Handlingsside
+    - Selvbetjening - Handlingssider
+    - Selvbetjening - Kategori
+    - Selvbetjening - Kategorier
+    - Selvbetjeningsmodul
+    
+2. Datatypes installed
+    - # Selvbetjening - Punktopstilling
+    - # Selvbetjening - Kategorivælger
+    - # Selvbetjening - Handlingssider
+    
+3. Structure installed (Content)
+    - Moduler
+      - Selvbetjening
+        - Kategorier
+        - Handlingssider
 
 
 
 [NuGetPackage]: https://www.nuget.org/packages/Skybrud.Umbraco.SelfService
-[GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.SelfService
-
+[GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.SelfService/releases/latest
