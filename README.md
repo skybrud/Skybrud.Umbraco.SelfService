@@ -14,7 +14,7 @@ In it's current state, the package will add logic for categories and action page
     * [URL provider](#url-provider)
     * [Content finder](#content-finder)
     * [Startup](#startup)
-* [Installed doctypes, datatypes and content](#installed-doctypes,-datatypes-and-content)
+* [Installed doctypes, datatypes and content](#installed-doctypes-datatypes-and-content)
 
 ## Installation
 
@@ -27,7 +27,7 @@ Coming soon ;)
 ## Setup
 
 #### Run the installer
-Once you have installed the NuGet package, you will need to run the installer to set up the package. The installer will add a number or content types and data types as well as add a few items in the content section.
+Once you have installed the NuGet package, you will need to run the installer to set up the package. [The installer will add a number or content types and data types as well as add a few items in the content section](#installed-doctypes-datatypes-and-content).
 
 The installer is currently just a WebApi method that you can call in your browser. When running the installer, it will by default create a new container called `Selvbetjening` (you can just rename this after the install) at the root level. This can be done by calling the following URL in your Umbraco installation:
 
