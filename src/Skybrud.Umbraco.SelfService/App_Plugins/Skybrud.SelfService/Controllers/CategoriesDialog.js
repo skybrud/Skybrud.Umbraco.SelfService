@@ -3,6 +3,9 @@
     // Skip if we doesn't have an array
     if (!Array.isArray($scope.dialogOptions.selected)) return;
 
+    // Flag indicating wether the dialog is loading
+    $scope.loading = true;
+
     // Update the categories already selected
     $scope.bacon = [];
     angular.forEach($scope.dialogOptions.selected, function (cat) {
@@ -55,6 +58,9 @@
 
     // Make a call to the API to get the category tree
     $http.get('/umbraco/backoffice/api/SelfServiceAdmin/GetCategoriesTree').success(function (body) {
+
+        // Update the flag
+        $scope.loading = false;
 
         // Set the categories in the scope
         $scope.categoriesTree = body;

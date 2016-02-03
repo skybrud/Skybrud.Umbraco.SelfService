@@ -1,5 +1,11 @@
 ﻿<div class="umb-panel SelfServiceCategoriesDialog" ng-controller="SelfServiceCategoriesDialogController">
     <div class="umb-panel-body no-header with-footer">
+        <div ng-show="loading">
+            <em>Loading categories...</em>
+        </div>
+        <div ng-show="!loading && categoriesTree.length == 0">
+            <em>You have not yet created (or published) any categories.</em>
+        </div>
         <ul>
             <li ng-repeat="category in categoriesTree" ng-include="'/App_Plugins/Skybrud.SelfService/Views/Partials/Category.html'"></li>
         </ul>
