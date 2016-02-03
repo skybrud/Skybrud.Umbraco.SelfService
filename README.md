@@ -32,13 +32,13 @@ Once you have installed the NuGet package, you will need to run the installer to
 The installer is currently just a WebApi method that you can call in your browser. When running the installer, it will by default create a new container called `Selvbetjening` (you can just rename this after the install) at the root level. This can be done by calling the following URL in your Umbraco installation:
 
 ```
-/umbraco/api/selfservice/install/
+/umbraco/backoffice/api/selfservice/install/
 ```
 
 If you wish the `Selvbetjening` node to be created under a specific node, you can specify the ID of that node as a parameter to the installer like the URL below:
 
 ```
-/umbraco/api/selfservice/install/?parentId=1090
+/umbraco/backoffice/api/selfservice/install/?parentId=1090
 ```
 
 After running the installer, your content section should look something like this:
