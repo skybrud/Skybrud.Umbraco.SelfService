@@ -275,6 +275,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Api\SelfServiceAdminController.cs" />
     <Compile Include="Install\SelfServiceContentType.cs" />
     <Compile Include="Install\SelfServiceDataType.cs" />
     <Compile Include="Controllers\Api\SelfServiceController.cs" />

@@ -86,7 +86,7 @@
         // Declare the HTTP options
         var req = {
             method: 'GET',
-            url: '/umbraco/api/SelfService/GetActionPages',
+            url: '/umbraco/backoffice/api/SelfServiceAdmin/GetActionPages',
             params: args
         };
 
@@ -108,6 +108,12 @@
                 });
             }
 
+        }).error(function(body) {
+            if (body.meta && body.meta.error) {
+                notificationsService.error('Action pages', body.meta.error);
+            } else {
+                notificationsService.error('Action pages', 'Unable to load action pages');
+            }
         });
 
     };

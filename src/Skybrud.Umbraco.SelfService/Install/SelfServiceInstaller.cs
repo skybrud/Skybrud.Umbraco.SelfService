@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Skybrud.Umbraco.SelfService.Constants;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
@@ -94,9 +95,9 @@ namespace Skybrud.Umbraco.SelfService.Install {
             IContentService cs = ApplicationContext.Current.Services.ContentService;
 
             var contentDefinitions = new[] {
-                new { parent = default(string), guid = "a3f0120e-ea17-4a6d-8355-2a66ccdb2cff", type = "SkySelfServiceModule", name = "Selvbetjening" },
-                new { parent = "a3f0120e-ea17-4a6d-8355-2a66ccdb2cff", guid = "42895027-98a3-49c9-845d-493abb34d5f9", type = "SkySelfServiceCategories", name = "Kategorier" },
-                new { parent = "a3f0120e-ea17-4a6d-8355-2a66ccdb2cff", guid = "942daec4-34cc-4114-9f9e-37c84c6de572", type = "SkySelfServiceActionPages", name = "Handlingssider" }
+                new { parent = default(string), guid = SelfServiceConstants.Pages.Module, type = "SkySelfServiceModule", name = "Selvbetjening" },
+                new { parent = "a3f0120e-ea17-4a6d-8355-2a66ccdb2cff", guid = SelfServiceConstants.Pages.Categories, type = "SkySelfServiceCategories", name = "Kategorier" },
+                new { parent = "a3f0120e-ea17-4a6d-8355-2a66ccdb2cff", guid = SelfServiceConstants.Pages.ActionPages, type = "SkySelfServiceActionPages", name = "Handlingssider" }
             };
 
             foreach (var contentDefinition in contentDefinitions) {

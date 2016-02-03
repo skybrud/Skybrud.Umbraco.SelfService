@@ -54,7 +54,7 @@
     }
 
     // Make a call to the API to get the category tree
-    $http.get('/umbraco/api/SelfService/GetCategoriesTree').success(function(body) {
+    $http.get('/umbraco/backoffice/api/SelfServiceAdmin/GetCategoriesTree').success(function (body) {
 
         // Set the categories in the scope
         $scope.categoriesTree = body;

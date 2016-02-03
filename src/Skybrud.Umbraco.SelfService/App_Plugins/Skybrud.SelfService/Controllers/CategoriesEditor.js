@@ -33,7 +33,7 @@
         updateIds();
     };
 
-    $http.get('/umbraco/api/SelfService/GetCategoriesContext?ids=' + $scope.ids.join(',')).success(function (body) {
+    $http.get('/umbraco/backoffice/api/SelfServiceAdmin/GetCategoriesContext?ids=' + $scope.ids.join(',')).success(function (body) {
         $scope.startNode = body.startNodeId;
         $scope.categories = body.selected;
         updateIds();

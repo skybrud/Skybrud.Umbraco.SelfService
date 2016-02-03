@@ -32,6 +32,25 @@ namespace Skybrud.Umbraco.SelfService.Constants {
         public const string CategoriesXPath = "//SkyModules/SkySelfServiceModule/SkySelfServiceCategories";
         public const string Categories1LevelXPath = "//SkyModules/SkySelfServiceModule/SkySelfServiceCategories/SkySelfServiceCategory";
 
+        public static class Pages {
+
+            /// <summary>
+            /// Gets the GUID of the module node.
+            /// </summary>
+            public const string Module = "a3f0120e-ea17-4a6d-8355-2a66ccdb2cff";
+
+            /// <summary>
+            /// Gets the GUID of the categories node.
+            /// </summary>
+            public const string Categories = "42895027-98a3-49c9-845d-493abb34d5f9";
+
+            /// <summary>
+            /// Gets the GUID of the action pages node.
+            /// </summary>
+            public const string ActionPages = "942daec4-34cc-4114-9f9e-37c84c6de572";
+            
+        }
+
     }
 
 }
