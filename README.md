@@ -14,9 +14,30 @@ Install this NuGet package in your Visual Studio project. If you have both a web
 Grab a ZIP file of the latest release; unzip and move the contents to the root directory of your web application.
 
 2. Run installation url to install data in Umbraco
-If you have an existing container for your modules, please add the nodeId from this container to your installation-url. Eg.: /umbraco/api/selfservice/install/?parentId=1090
+You have to run a installation-url (in your browser), for Skybrud.Umbraco.SelfService to be able to create documenttypes, datatypes and structure in your solution. 
 
-else just run /umbraco/api/selfservice/install/ in your favorite browser.
+  1. DocTypes installed
+      1. Selvbetjening - Handlingsside
+      2. Selvbetjening - Handlingssider
+      3. Selvbetjening - Kategori
+      4. Selvbetjening - Kategorier
+      5. Selvbetjeningsmodul
+      
+  2. Datatypes installed
+      1. # Selvbetjening - Punktopstilling
+      2. # Selvbetjening - Kategorivælger
+      3. # Selvbetjening - Handlingssider
+      
+  3. Structure installed (Content)
+      1. Moduler
+        1. Selvbetjening
+          1. Kategorier
+          2. Handlingssider
+          
+
+If you have an existing container for your modules, please add the nodeId from this container to your installation-url. Eg.: */umbraco/api/selfservice/install/?parentId=1090*
+
+else just run */umbraco/api/selfservice/install/* in your favorite browser.
 
 3. Change your default View for the "Handlingsside visning" doctype
   1. Edit "Selvbetjening - Handlingssider"
