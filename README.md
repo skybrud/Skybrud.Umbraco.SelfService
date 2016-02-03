@@ -14,6 +14,7 @@ In it's current state, the package will add logic for categories and action page
     * [URL provider](#url-provider)
     * [Content finder](#content-finder)
     * [Startup](#startup)
+* [Installed doctypes, datatypes and content](#installed-doctypes,-datatypes-and-content)
 
 ## Installation
 
