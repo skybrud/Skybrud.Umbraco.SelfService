@@ -200,7 +200,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
 
 
 
-            hai = hai.Skip(offset).Take(limit);
+            hai = hai.Where(x=> !x.Fields["path"].Contains(",-20,")).Skip(offset).Take(limit);
 
             return new {
                 meta = new {
@@ -225,6 +225,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
                 data = (
                     from result in hai
                     let content = UmbracoContext.ContentCache.GetById(result.Id)
+                    
                     select new {
                         id = result.Id,
                         name = result.Fields["nodeName"],
