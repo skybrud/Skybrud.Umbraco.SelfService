@@ -125,7 +125,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
             if (!String.IsNullOrWhiteSpace(text)) {
 
                 // Fields to search for the keywords
-                List<string> fields = new List<string> { "nodeName", "title" };
+                List<string> fields = new List<string> { "nodeName", "title", "nodeName_lci", "title_lci" };
 
                 string lciQuery = PrepareSearchString(text);
 
@@ -157,7 +157,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
 
             // Make the search in Examine
             ISearchResults results = searcher.Search(criteria);
-
+            
             int pages = (int) Math.Ceiling(results.TotalItemCount / (double) limit);
             page = Math.Max(1, Math.Min(page, pages));
 
@@ -237,7 +237,10 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
                         url = content == null ? null : content.Url
                     }
                 ),
-                query
+                query = new
+                {
+                    q= String.Join(" AND ", query)
+                }
             };
 
         }
