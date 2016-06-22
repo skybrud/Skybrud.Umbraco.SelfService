@@ -296,6 +296,9 @@
     <Compile Include="Enums\SelfServiceSortOrder.cs" />
     <Compile Include="Enums\SelfServiceIndexType.cs" />
     <Compile Include="Models\Categories\SelfServiceCategoriesRepository.cs" />
+    <Compile Include="Extensions\JObjectExtensions.cs" />
+    <Compile Include="Models\List\SelfServiceListItem.cs" />
+    <Compile Include="Models\List\SelfServiceList.cs" />
     <Compile Include="Plugins\SelfServicePluginCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Categories\SelfServiceCategory.cs" />
