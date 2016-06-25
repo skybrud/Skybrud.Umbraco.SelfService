@@ -101,7 +101,7 @@ namespace Skybrud.Umbraco.SelfService.Models.ActionPages {
                 if (item is string) {
                     sb.AppendLine(item + "");
                 } else if (item is List<object>) {
-                    sb.AppendLine(GetQuery((List<object>) item));
+                    sb.AppendLine("(" + GetQuery((List<object>) item) + ")");
                 }
             }
 
