@@ -27,6 +27,16 @@ namespace Skybrud.Umbraco.SelfService.Models.Categories {
         /// </summary>
         public SelfServiceContext Context { get; private set; }
 
+        /// <summary>
+        /// Gets an array of all categories.
+        /// </summary>
+        public SelfServiceCategory[] All {
+            get {
+                if (_categories == null) { LoadCategories(); }
+                return _categoriesLookup.Values.ToArray();
+            }
+        }
+
         #endregion
 
         #region Constructors

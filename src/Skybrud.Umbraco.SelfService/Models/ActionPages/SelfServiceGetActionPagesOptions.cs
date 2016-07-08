@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Skybrud.Umbraco.SelfService.Enums;
+using Skybrud.Umbraco.SelfService.Models.Categories;
 
 namespace Skybrud.Umbraco.SelfService.Models.ActionPages {
 
@@ -138,19 +139,42 @@ namespace Skybrud.Umbraco.SelfService.Models.ActionPages {
 
         protected virtual void AppendCategories(List<object> query) {
 
+            // Return if no categories have been specified
             if (CategoryIds == null || CategoryIds.Length == 0) return;
 
             if (query.Count > 0) query.Add("AND");
 
-            List<object> categories = new List<object>();
+            // Look up the selected categories so we can search in their descendants as well
+            int[] categoryIds = GetSelectedCategoryIds();
 
-            for (int i = 0; i < CategoryIds.Length; i++) {
+            // Generate the Examine query for the category IDs
+            List<object> categories = new List<object>();
+            for (int i = 0; i < categoryIds.Length; i++) {
                 if (i > 0) categories.Add("OR");
-                categories.Add("skySelfServiceCategories:" + CategoryIds[i]);
+                categories.Add("skySelfServiceCategories:" + categoryIds[i]);
             }
 
             query.Add(categories);
 
+        }
+
+        /// <summary>
+        /// Returns an array with the IDs of the selected categories as well as any descendant categories.
+        /// </summary>
+        /// <returns>Returns an array of <see cref="System.Int32"/>.</returns>
+        private int[] GetSelectedCategoryIds() {
+            List<int> temp = new List<int>();
+            foreach (SelfServiceCategory category in SelfServiceContext.Current.Categories.GetCategoryByIds(CategoryIds)) {
+                AppendCategory(temp, category);
+            }
+            return temp.Distinct().ToArray();
+        }
+
+        private void AppendCategory(List<int> categoryIds, SelfServiceCategory category) {
+            categoryIds.Add(category.Id);
+            foreach (SelfServiceCategory child in category.Children) {
+                AppendCategory(categoryIds, child);
+            }
         }
 
         private string PrepareSearchString(string query) {
@@ -160,4 +184,5 @@ namespace Skybrud.Umbraco.SelfService.Models.ActionPages {
         #endregion
 
     }
+
 }
