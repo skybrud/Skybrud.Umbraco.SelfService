@@ -69,7 +69,7 @@ namespace Skybrud.Umbraco.SelfService.Models.ActionPages {
             BaseSearchProvider searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
 
             // Determine the current page
-            int page = (int) Math.Floor(options.Offset / (double) options.Limit);
+            int page = options.Limit == 0 ? 1 : (int) Math.Floor(options.Offset / (double) options.Limit) + 1;
             
             // Create a new search criteria and set our query
             ISearchCriteria criteria = searcher.CreateSearchCriteria();
