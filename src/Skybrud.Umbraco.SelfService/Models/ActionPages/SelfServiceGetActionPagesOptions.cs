@@ -122,7 +122,7 @@ namespace Skybrud.Umbraco.SelfService.Models.ActionPages {
             if (query.Count > 0) query.Add("AND");
 
             // Fields to search for the keywords
-            List<string> fields = new List<string> { "nodeName", "title" };
+            List<string> fields = new List<string> { "__nodeName", "nodeName", "title" };
 
             string lciQuery = PrepareSearchString(Text);
 

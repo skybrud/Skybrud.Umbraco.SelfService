@@ -125,7 +125,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
             if (!String.IsNullOrWhiteSpace(text)) {
 
                 // Fields to search for the keywords
-                List<string> fields = new List<string> { "nodeName", "title", "nodeName_lci", "title_lci" };
+                List<string> fields = new List<string> { "__nodeName", "nodeName", "title", "nodeName_lci", "title_lci" };
 
                 string lciQuery = PrepareSearchString(text);
 
