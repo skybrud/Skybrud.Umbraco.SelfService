@@ -13,7 +13,6 @@ using Skybrud.Umbraco.SelfService.Helpers;
 using Skybrud.Umbraco.SelfService.Install;
 using Skybrud.WebApi.Json;
 using Skybrud.WebApi.Json.Meta;
-using Umbraco.Core.Media;
 using Umbraco.Core.Models;
 using Umbraco.Web.WebApi;
 using Skybrud.Umbraco.SelfService.Extensions;
@@ -88,9 +87,33 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
         
         }
 
+        [HttpGet]
+        public object GetActionPagesByIds(string ids) {
+
+            // Parse the input string into content IDs
+            int[] contentIds = (ids ?? "").CsvToInt();
+
+            // Return an empty collection if not valid IDs were specified
+            if (contentIds.Length == 0) return new {items = new object[0]};
+
+            // Look up the specified IDs in either the content cache or the content service
+            List<object> items = new List<object>();
+            foreach (int contentId in contentIds) {
+                IPublishedContent published = UmbracoContext.ContentCache.GetById(contentId);
+                if (published == null) {
+                    IContent content = ApplicationContext.Services.ContentService.GetById(contentId);
+                    items.Add(new { id = contentId, name = content == null ? default(string) : content.Name, url = default(string), published = false });
+                } else {
+                    items.Add(new { id = contentId, name = published.Name, url = published.Url, published = true });
+                }
+            }
+
+            return new { items };
+
+        }
 
         [HttpGet]
-        public object GetActionPages(string text = null, string categories = null, int limit = 30, int page = 1, string sort = null, string order = null) {
+        public object GetActionPages(string text = null, string categories = null, int limit = 30, int page = 1, string sort = null, string order = null, string ignore = null) {
 
             // Get a reference to the parent node holding the action pages
             IPublishedContent parent = SelfServiceHelpers.GetContentFromGuid(SelfServiceConstants.Pages.ActionPages);
@@ -105,7 +128,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
 
             int[] categoryIds = StringHelpers.CsvToInt(categories);
 
-
+            int[] ignoreIds = (ignore ?? "").CsvToInt();
 
 
 
@@ -156,9 +179,9 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
             criteria = criteria.RawQuery(String.Join(" AND ", query));
 
             // Make the search in Examine
-            ISearchResults results = searcher.Search(criteria);
+            SearchResult[] results = searcher.Search(criteria).Where(x => !ignoreIds.Contains(x.Id)).ToArray();
             
-            int pages = (int) Math.Ceiling(results.TotalItemCount / (double) limit);
+            int pages = (int) Math.Ceiling(results.Length / (double) limit);
             page = Math.Max(1, Math.Min(page, pages));
 
             int offset = (page * limit) - limit;
@@ -214,7 +237,7 @@ namespace Skybrud.Umbraco.SelfService.Controllers.Api {
                     pages,
                     limit,
                     offset,
-                    total = results.TotalItemCount,
+                    total = results.Length,
                     from = offset + 1,
                     to = Math.Min(offset + limit, results.Count())
                 },
